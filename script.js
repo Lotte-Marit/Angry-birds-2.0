@@ -23,9 +23,7 @@ function draw() {
   fill('red') 
   circle(x,y,15);
   
+  line(40,300,250,150)
  
 }
-
-
-
 
