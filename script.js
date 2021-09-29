@@ -1,15 +1,13 @@
 var x, y, vx, vy
 
 function setup() {
-  createCanvas(500, 400);
-  
+  createCanvas(500, 400);  
   
   y = 320;
-  x =  40;
- 
+  x =  40; 
 }
 
-
+var lineY = 150;
 
 function draw() {
   background(225);
@@ -23,7 +21,17 @@ function draw() {
   fill('red') 
   circle(x,y,15);
   
-  line(40,300,250,150)
+  line(40,300,width,lineY);
+  //if(upArrow){ lineY--; }
+  //if(downArrow){ lineY++; }
+  if (keyIsDown(UP_ARROW)) {
+    lineY--;
+  }
+
+  if (keyIsDown(DOWN_ARROW)) {
+    lineY++;
+  }
+  
  
 }
 
