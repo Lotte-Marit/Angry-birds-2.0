@@ -20,7 +20,7 @@ function draw() {
   rect(370,210,50,50);
   rect(300,250,50,50)
  
-  fill('red')
+  fill('red') 
   circle(x,y,15);
   
  
