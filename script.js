@@ -14,6 +14,7 @@ class Block {
 
   checkCollision() {
     if (x > this.x) {
+      //gameState = 2;
       this.c = "red";
     }
   }
@@ -33,6 +34,7 @@ function setup() {
   rects.push(new Block(300, 250));
   rects.push(new Block(200, 350));
 
+
   y = 320;
   x = 40;
 
@@ -43,8 +45,40 @@ function setup() {
 var vx = 0;
 var vy = 0;
 
+var gameState = 0; // 0 = menu, 1 = game, 2 = gameover
+
+
 
 function draw() {
+
+  text("gameState" + gameState, 25, 25);
+
+  if (gameState == 0) {
+    menu();
+  }
+
+  if (gameState == 1) {
+    game();
+  }
+
+  if (gameState == 2) {
+    gameOver();
+  }
+
+}
+
+var x = 0 
+
+function menu() {
+  background("#ababab");
+  text("MENU", 25, 45);
+  text("1. start", 25, 65);
+  text("2. game over", 25, 85);
+  text("3. terug naar menu", 25, 105);
+}
+
+function game() {
+ 
   background(225);
 
   fill('green')
@@ -62,6 +96,27 @@ function draw() {
 
 
   line(55, 310, mouseX, mouseY);
+}
+
+function gameOver() {
+  background("green");
+  text("GAME OVER", 25, 45);
+  x = 0;
+}
+
+function keyPressed() {
+
+  if (keyCode == 49) {
+    gameState = 1;
+  }
+
+  if (keyCode == 50) {
+    gameState = 2;
+  }
+
+  if (keyCode == 51) {
+    gameState = 0;
+  }
 }
 
 function mouseClicked() {
