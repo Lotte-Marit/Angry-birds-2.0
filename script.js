@@ -1,5 +1,5 @@
-class Block{
-  constructor(x,y){
+class Block {
+  constructor(x, y) {
     this.x = x;
     this.y = y;
     this.w = 50;
@@ -7,13 +7,13 @@ class Block{
     this.c = "green";
   }
 
-  draw(){
+  draw() {
     fill(this.c);
-    rect(this.x,this.y,this.w,this.h); 
+    rect(this.x, this.y, this.w, this.h);
   }
 
-  checkCollision(){
-    if(x > this.x ){
+  checkCollision() {
+    if (x > this.x) {
       this.c = "red";
     }
   }
@@ -21,30 +21,27 @@ class Block{
 
 
 var x, y, vx, vy;
-var rect1, rect2, rect3;
 var rects = [];
 
 function setup() {
-  createCanvas(500, 400);  
-  rect1 = new Block(380, 270);
-  rect2 = new Block(370,210);
-  rect3 = new Block(300,250);
-  
-  rects.push(rect1);
-  rects.push(rect2);
-  rects.push(rect3);
-  rects.push(new Block(200,250));
-  rects.push(new Block(200,350));
+  createCanvas(500, 400);
+
+
+  rects.push(new Block(200, 250));
+  rects.push(new Block(300, 350));
+  rects.push(new Block(250, 300));
+  rects.push(new Block(300, 250));
+  rects.push(new Block(200, 350));
 
   y = 320;
-  x =  40; 
+  x = 40;
+
+  console.log(rects);
 
 }
 
 var vx = 0;
 var vy = 0;
-
-var lineY = 190;
 
 
 function draw() {
@@ -52,31 +49,19 @@ function draw() {
 
   fill('green')
 
- rects.forEach((b)=>{
-   b.draw();
-   b.checkCollision();
- })
- 
+  rects.forEach((b) => {
+    b.draw();
+    b.checkCollision();
+  })
+
   fill('red');
-  circle(x,y,15);
+  circle(x, y, 15);
 
   x += vx;
   y += vy;
-  
-  line(55,310,mouseX,mouseY);
-  //if(upArrow){ lineY--; }
-  //if(downArrow){ lineY++; }
-  if (keyIsDown(UP_ARROW)) {
-    lineY--;
-  }
 
-  if (keyIsDown(DOWN_ARROW)) {
-    lineY++;
-  }
 
-  if (circle(300,50)) {
-    return
-  }
+  line(55, 310, mouseX, mouseY);
 }
 
 function mouseClicked() {
@@ -86,5 +71,5 @@ function mouseClicked() {
   let ydist = y - mouseY;
 
   let speed = xdist / vx;
-  vy = (ydist / speed) *-1;
+  vy = (ydist / speed) * -1;
 }
