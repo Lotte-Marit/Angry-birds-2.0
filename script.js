@@ -1,3 +1,5 @@
+var audio = new Audio('data/img/audio.mp3');
+
 class Block {
   constructor(x, y) {
     this.x = x;
@@ -13,13 +15,14 @@ class Block {
   }
 
   checkCollision() {
-    if (x > this.x) {
-      //gameState = 2;
+    if (x > this.x && y > this.y) {
       this.c = "red";
+      //audio.play();
+      //document.getElementById('data/img/yourAudioTag.mp3').play();
+      // gameState = 2;
     }
   }
 }
-
 
 var x, y, vx, vy;
 var rects = [];
@@ -47,7 +50,7 @@ var vy = 0;
 
 var gameState = 0; // 0 = menu, 1 = game, 2 = gameover
 
-
+var start = 0;
 
 function draw() {
 
@@ -59,6 +62,7 @@ function draw() {
 
   if (gameState == 1) {
     game();
+    start = 1
   }
 
   if (gameState == 2) {
@@ -120,7 +124,9 @@ function keyPressed() {
 }
 
 function mouseClicked() {
-  vx = 3;
+  if (start == 1) {
+    vx = 3;
+  }
 
   let xdist = mouseX - x;
   let ydist = y - mouseY;
