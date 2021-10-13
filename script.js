@@ -17,6 +17,7 @@ class Block {
   checkCollision() {
     if (x > this.x && y > this.y) {
       this.c = "red";
+      
       //audio.play();
       //document.getElementById('data/img/yourAudioTag.mp3').play();
       // gameState = 2;
@@ -71,7 +72,7 @@ function draw() {
 
 }
 
-var x = 0 
+var x = 0
 
 function menu() {
   background("#ababab");
@@ -82,7 +83,7 @@ function menu() {
 }
 
 function game() {
- 
+
   background(225);
 
   fill('green')
@@ -90,10 +91,18 @@ function game() {
   rects.forEach((b) => {
     b.draw();
     b.checkCollision();
-  })
+  });
 
   fill('red');
   circle(x, y, 15);
+
+  if (x > width) {
+    y = 320;
+    x = 40;
+
+    vx = 0 
+    vy = 0
+  }
 
   x += vx;
   y += vy;
