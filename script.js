@@ -1,5 +1,10 @@
 var audio = new Audio('data/img/audio.mp3');
+var score = 0; 
 
+function preload(){
+img = loadImage("background.png")
+img2 = loadImage("varkentje.png")
+}
 class Block {
   constructor(x, y) {
     this.x = x;
@@ -32,11 +37,12 @@ function setup() {
   createCanvas(500, 400);
 
 
-  rects.push(new Block(200, 250));
+  rects.push(new Block(200, 250 ));
   rects.push(new Block(300, 350));
   rects.push(new Block(250, 300));
   rects.push(new Block(300, 250));
   rects.push(new Block(200, 350));
+ 
 
 
   y = 320;
@@ -84,8 +90,9 @@ function menu() {
 
 function game() {
 
-  background(225);
-
+  background(img);
+  textSize(24); 
+  text("Score: " + score, 10, 30)
   fill('green')
 
   rects.forEach((b) => {
