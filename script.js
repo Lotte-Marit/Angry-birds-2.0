@@ -1,152 +1,162 @@
-var audio = new Audio('data/img/audio.mp3');
-var score = 0; 
+let ballY, ballX, bg, bgMusic, pig, ball, arrow, pigHit, catapult;
+let canvasWidth = 852;
+let canvasHeight = 480;
+let gameState = 0;
+let gameStop = false;
 
-function preload(){
-img = loadImage("background.png")
-img2 = loadImage("varkentje.png")
-}
-class Block {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.w = 50;
-    this.h = 50;
-    this.c = "green";
-  }
-
-  draw() {
-    fill(this.c);
-    rect(this.x, this.y, this.w, this.h);
-  }
-
-  checkCollision() {
-    if (x > this.x && y > this.y) {
-      this.c = "red";
-      
-      //audio.play();
-      //document.getElementById('data/img/yourAudioTag.mp3').play();
-      // gameState = 2;
-    }
-  }
-}
-
-var x, y, vx, vy;
-var rects = [];
-
+/**
+ * Setup canvas and starting point
+ */
 function setup() {
-  createCanvas(500, 400);
+  // Load music & images
+  bg = loadImage('achtergrond.jpeg');
+  bgMusic = loadSound('achtergrondmuziek.mp3');
+  pigHit = loadSound('hit.mp3');
+  ball = loadImage('bal.png');
+  arrow = loadImage('pijl.png');
+  catapult = loadImage('catapult.png');
+  pig = loadImage('pig.png');
 
-
-  rects.push(new Block(200, 250 ));
-  rects.push(new Block(300, 350));
-  rects.push(new Block(250, 300));
-  rects.push(new Block(300, 250));
-  rects.push(new Block(200, 350));
- 
-
-
-  y = 320;
-  x = 40;
-
-  console.log(rects);
-
+  createCanvas(canvasWidth, canvasHeight);
+  ballY = 370;
+  ballX = 45;
 }
 
-var vx = 0;
-var vy = 0;
+let vx = 0;
+let vy = 0;
+let gameLives = 3;
+let ballSpeed = 5;
+let lineStartX = 55;
+let lineStartY = 400;
+let lineEndX = canvasWidth;
+let lineEndY = 190;
+let targets = [
+  [700, 400, 50, 50],
+  [780, 400, 50, 50],
+  [745, 340, 50, 50]
+];
 
-var gameState = 0; // 0 = menu, 1 = game, 2 = gameover
 
-var start = 0;
+let targetObjects = [];
 
 function draw() {
-
-  text("gameState" + gameState, 25, 25);
-
-  if (gameState == 0) {
-    menu();
+  if (gameState === 0) {
+    startGame();
+  } else if (gameState === 1) {
+    playGame();
+  } else if (gameState === 2) {
+    finishGame();
   }
-
-  if (gameState == 1) {
-    game();
-    start = 1
-  }
-
-  if (gameState == 2) {
-    gameOver();
-  }
-
 }
 
-var x = 0
-
-function menu() {
-  background("#ababab");
-  text("MENU", 25, 45);
-  text("1. start", 25, 65);
-  text("2. game over", 25, 85);
-  text("3. terug naar menu", 25, 105);
+function startGame() {
+  background(bg);
+  textAlign(CENTER);
+  textSize(26);
+  text("Klik om te starten", width / 2, height / 2);
 }
 
-function game() {
+function playGame() {
+  background(bg);
 
-  background(img);
-  textSize(24); 
-  text("Score: " + score, 10, 30)
-  fill('green')
-
-  rects.forEach((b) => {
-    b.draw();
-    b.checkCollision();
-  });
-
-  fill('red');
-  circle(x, y, 15);
-
-  if (x > width) {
-    y = 320;
-    x = 40;
-
-    vx = 0 
-    vy = 0
-  }
-
-  x += vx;
-  y += vy;
-
-
-  line(55, 310, mouseX, mouseY);
-}
-
-function gameOver() {
-  background("green");
-  text("GAME OVER", 25, 45);
-  x = 0;
-}
-
-function keyPressed() {
-
-  if (keyCode == 49) {
-    gameState = 1;
-  }
-
-  if (keyCode == 50) {
+  // Stop game when dead
+  if (gameLives < 1 || targets.length < 1) {
     gameState = 2;
   }
 
-  if (keyCode == 51) {
-    gameState = 0;
+  // Game lives
+  textAlign(LEFT);
+  textSize(18);
+  text("Levens: " + gameLives, 10, 20);
+  // Birds
+  targets.map((target, key) => {
+    targetObjects.push(image(pig, target[0], target[1], target[2], target[3]));
+  });
+  // Ball
+  image(ball, ballX, ballY, 72, 65);
+  if (ballX < canvasWidth && !gameStop) {
+    ballX += vx;
+    ballY += vy;
+  } else {
+    if (gameStop == false) {
+      gameLives -= 1;
+    }
+    gameStop = true;
+    ballX = 45;
+    ballY = 370;
+    image(ball, ballX, ballY, 72, 65);
+  }
+
+  line(lineStartX, lineStartY, lineEndX, lineEndY);
+
+  // Catapult
+  image(catapult, -10, 350);
+
+  // Key press down move line down
+  if (keyIsDown(UP_ARROW)) {
+    lineEndY--;
+  }
+
+  // Key press up move line up
+  if (keyIsDown(DOWN_ARROW)) {
+    lineEndY++;
+  }
+  checkCollisions(targets, ballX, ballY, targetObjects);
+
+}
+
+
+function finishGame() {
+  background(bg);
+  textAlign(CENTER);
+  textSize(28);
+  if (targets.length < 1) {
+    text("GEWONNEN!\n", width / 2, height / 2);
+  } else {
+    text("GAME OVER\n", width / 2, height / 2);
   }
 }
 
-function mouseClicked() {
-  if (start == 1) {
-    vx = 3;
+
+/**
+ * If space bar pressed start moving the ball
+ */
+function keyPressed() {
+  if (keyCode === 32 && gameState === 1) {
+    vx = ballSpeed;
+    // Get diff between top line and start line
+    var lineWidth = lineEndX - lineStartX;
+    var lineElevation = lineEndY - lineStartY;
+    // Set lineElevation per ballSpeed
+    vy = lineElevation / (lineWidth / ballSpeed);
+
+    gameStop = false;
+  }
+}
+
+function checkCollisions(targets, ballX, ballY, objects) {
+  targets.map((target, key) => {
+    if ((ballX > target[0] && ballX < (target[0] + 50)) && (((ballY > target[1] + 50) || (ballY > target[1]) || (ballY > target[1] - 50)) && ballY < (target[1] + 50))) {
+      dropBird(key);
+      pigHit.play();
+    }
+  });
+}
+
+function dropBird(key) {
+  targets.splice(key, 1);
+}
+
+function mousePressed() {
+  console.log(gameState);
+  if (gameState === 0) {
+    gameState += 1;
+    bgMusic.setVolume(.2);
+    bgMusic.play();
+
+  } else if (gameState === 2) {
+    bgMusic.stop();
+
   }
 
-  let xdist = mouseX - x;
-  let ydist = y - mouseY;
-
-  let speed = xdist / vx;
-  vy = (ydist / speed) * -1;
 }
