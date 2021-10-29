@@ -111,10 +111,11 @@ function finishGame() {
   textAlign(CENTER);
   textSize(28);
   if (targets.length < 1) {
-    text("GEWONNEN!\n", width / 2, height / 2);
+    text("GEWONNEN!\n\n Opnieuw beginnen", width / 2, height / 2);
+
   } else {
-    text("GAME OVER\n", width / 2, height / 2);
-  } 
+    text("GAME OVER\n\n Opnieuw beginnen", width / 2, height / 2);
+  }
 }
 
 
@@ -156,6 +157,16 @@ function mousePressed() {
 
   } else if (gameState === 2) {
     bgMusic.stop();
+    gameLives = 3;
+    targets = [
+      [700, 400, 50, 50],
+      [780, 400, 50, 50],
+      [745, 340, 50, 50]
+    ];
+    gameStop = true;
+    ballX = 45;
+    ballY = 370;
+    gameState = 0;
 
   }
 
