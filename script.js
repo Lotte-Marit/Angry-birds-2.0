@@ -1,9 +1,19 @@
-let ballY, ballX, bg, bgMusic, pig, ball, arrow, pigHit, catapult;
-let canvasWidth = 852;
-let canvasHeight = 480;
-let gameState = 0;
-let gameStop = false;
+var ballY, ballX, bg, bgMusic, pig, ball, arrow, pigHit, catapult;
+var canvasWidth = 852;
+var canvasHeight = 480;
+var gameState = 0;
+var gameStop = false;
 
+var game = class {
+  constructor(lives,state) {
+    this.lives = lives;
+    this.state = state;
+  }
+
+  removeLife(){
+    this.lives -1;
+  }
+};
 /**
  * Setup canvas and starting point
  */
@@ -22,22 +32,22 @@ function setup() {
   ballX = 45;
 }
 
-let vx = 0;
-let vy = 0;
-let gameLives = 3;
-let ballSpeed = 5;
-let lineStartX = 55;
-let lineStartY = 400;
-let lineEndX = canvasWidth;
-let lineEndY = 190;
-let targets = [
+var vx = 0;
+var vy = 0;
+var gameLives = 3;
+var ballSpeed = 5;
+var lineStartX = 55;
+var lineStartY = 400;
+var lineEndX = canvasWidth;
+var lineEndY = 190;
+var targets = [
   [700, 400, 50, 50],
   [780, 400, 50, 50],
   [745, 340, 50, 50]
 ];
 
 
-let targetObjects = [];
+var targetObjects = [];
 
 function draw() {
   if (gameState === 0) {
