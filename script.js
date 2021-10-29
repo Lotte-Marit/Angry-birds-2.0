@@ -114,7 +114,7 @@ function finishGame() {
     text("GEWONNEN!\n", width / 2, height / 2);
   } else {
     text("GAME OVER\n", width / 2, height / 2);
-  }
+  } 
 }
 
 
